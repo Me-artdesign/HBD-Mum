@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Mum 🎂</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Comic Sans MS", cursive;
+    background: linear-gradient(270deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+    background-size: 800% 800%;
+    animation: gradientBG 10s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    z-index: 2;
+    animation: popIn 1.5s ease;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  h1 {
+    color: #ff4081;
+    font-size: 3em;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  p {
+    font-size: 1.2em;
+    color: #555;
+  }
+
+  button {
+    margin: 10px;
+    padding: 12px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: #ff4081;
+    color: white;
+    transition: transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+<canvas id="fireworks"></canvas>
+
+<div class="card">
+  <h1>🎂 Happy Birthday 🎂</h1>
+  <h1>Happy Birthday Mum 💖</h1>
+  <p>
+    Thank you for all your love, kindness,  
+    and everything you do every day.  
+    You mean the world to me 🌸
+  </p>
+
+  <button onclick="startParty()">Start the Party 🎶</button>
+  <button onclick="surprise()">Surprise 🎁</button>
+</div>
+
+<audio id="music" src="birthday.mp3"></audio>
+
+<script>
+function startParty() {
+  document.getElementById("music").play();
+  startConfetti();
+  startFireworks();
+}
+
+function surprise() {
+  alert("🎉🎂 Happy Birthday Mum! 🎂🎉\nYou are the best mum ever! 💖");
+}
+
+/* Confetti */
+const confettiCanvas = document.getElementById("confetti");
+const ctx = confettiCanvas.getContext("2d");
+confettiCanvas.width = window.innerWidth;
+confettiCanvas.height = window.innerHeight;
+
+let confetti = [];
+
+function startConfetti() {
+  for (let i = 0; i < 200; i++) {
+    confetti.push({
+      x: Math.random() * confettiCanvas.width,
+      y: Math.random() * confettiCanvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 20,
+      color: `hsl(${Math.random()*360},100%,50%)`
+    });
+  }
+  requestAnimationFrame(drawConfetti);
+}
+
+function drawConfetti() {
+  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confetti.forEach(c => {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+    ctx.fill();
+    c.y += Math.cos(c.d) + 2;
+    if (c.y > confettiCanvas.height) c.y = 0;
+  });
+  requestAnimationFrame(drawConfetti);
+}
+
+/* Fireworks */
+const fwCanvas = document.getElementById("fireworks");
+const fw = fwCanvas.getContext("2d");
+fwCanvas.width = window.innerWidth;
+fwCanvas.height = window.innerHeight;
+
+function startFireworks() {
+  setInterval(() => {
+    const x = Math.random() * fwCanvas.width;
+    const y = Math.random() * fwCanvas.height / 2;
+    for (let i = 0; i < 50; i++) {
+      fw.beginPath();
+      fw.strokeStyle = `hsl(${Math.random()*360},100%,50%)`;
+      fw.moveTo(x, y);
+      fw.lineTo(
+        x + Math.random()*100 - 50,
+        y + Math.random()*100 - 50
+      );
+      fw.stroke();
+    }
+  }, 700);
+}
+</script>
+
+</body>
+</html>
